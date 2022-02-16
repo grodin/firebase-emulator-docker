@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM node:16-alpine3.15
 
 ## Compatibility for glibc
 RUN apk --no-cache add gcompat
@@ -12,6 +12,13 @@ RUN apk --no-cache add openjdk11-jre-headless
 ## The following are just for debugging the container
 RUN apk --no-cache add bash curl
 
+ARG FIREBASE_TOOLS_VERSION="v10.2.0"
+
+RUN npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION}
+
+# Suppress npm update announcements
+RUN npm config set update-notifier false
+
 ENV USER=firebase-emulator
 
 ## Create user
@@ -20,18 +27,11 @@ RUN addgroup -g 1010 ${USER} \
 
 USER ${USER}
 
-ARG FIREBASE_TOOLS_VERSION="v10.2.0"
-
-RUN mkdir -p ${HOME}/firebase-tools
-
-WORKDIR /home/${USER}/firebase-tools
-
-RUN curl -L https://github.com/firebase/firebase-tools/releases/download/${FIREBASE_TOOLS_VERSION}/firebase-tools-linux -o firebase \
-    && chmod +x firebase
-
-ENV PATH=/home/${USER}/firebase-tools:${PATH}
-
 WORKDIR /home/${USER}
+
+RUN firebase setup:emulators:firestore
+
+COPY firebase.json .
 
 ENTRYPOINT ["firebase"]
 
