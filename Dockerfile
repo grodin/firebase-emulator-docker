@@ -39,4 +39,4 @@ COPY .firebaserc .
 
 ENTRYPOINT ["firebase"]
 
-CMD ["emulators:startn"]
+CMD ["emulators:start"]
