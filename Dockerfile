@@ -1,5 +1,7 @@
 FROM node:16-alpine3.15
 
+LABEL org.opencontainers.image.description Firebase firestore emulator for CI
+
 ## Compatibility for glibc
 RUN apk --no-cache add gcompat
 
@@ -33,6 +35,8 @@ RUN firebase setup:emulators:firestore
 
 COPY firebase.json .
 
+COPY .firebaserc .
+
 ENTRYPOINT ["firebase"]
 
-CMD ["--version"]
+CMD ["emulators:startn"]
