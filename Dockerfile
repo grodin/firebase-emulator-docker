@@ -40,7 +40,7 @@ LABEL "org.opencontainers.image.description"="Firebase firestore emulator for CI
 ARG FIRESTORE_PORT=8080
 ARG AUTH_PORT=9099
 
-EXPOSE ${FIRESTORE PORT} ${AUTH_PORT}
+EXPOSE ${FIRESTORE_PORT} ${AUTH_PORT}
 
 HEALTHCHECK --interval=15s --timeout=5s \
 	CMD curl -fs http://localhost:${AUTH_PORT} || curl -fs http://localhost:${FIRESTORE_PORT} || exit 1
