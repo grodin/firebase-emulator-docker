@@ -35,7 +35,7 @@ COPY firebase.json .
 
 COPY .firebaserc .
 
-LABEL org.opencontainers.image.description=Firebase firestore emulator for CI
+LABEL "org.opencontainers.image.description"="Firebase firestore emulator for CI"
 
 ARG FIRESTORE_PORT=8080
 ARG AUTH_PORT=9099
