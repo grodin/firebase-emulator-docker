@@ -38,12 +38,17 @@ COPY .firebaserc .
 LABEL "org.opencontainers.image.description"="Firebase firestore emulator for CI"
 
 ARG FIRESTORE_PORT=8080
+ENV FIRESTORE_PORT=${FIRESTORE_PORT}
+
 ARG AUTH_PORT=9099
+ENV AUTH_PORT=${AUTH_PORT}
 
 EXPOSE ${FIRESTORE_PORT} ${AUTH_PORT}
 
-HEALTHCHECK --interval=15s --timeout=5s \
-	CMD curl -fs http://localhost:${AUTH_PORT} || curl -fs http://localhost:${FIRESTORE_PORT} || exit 1
+COPY healthcheck.sh .
+
+HEALTHCHECK --interval=20s --timeout=15s \
+	CMD ./healthcheck.sh
 
 ENTRYPOINT ["firebase"]
 
