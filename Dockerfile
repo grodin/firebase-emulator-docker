@@ -30,6 +30,7 @@ USER ${USER}
 WORKDIR /home/${USER}
 
 RUN firebase setup:emulators:firestore
+RUN firebase setup:emulators:ui
 
 COPY firebase.json .
 
