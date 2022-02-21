@@ -1,7 +1,5 @@
 FROM node:16-alpine3.15
 
-LABEL org.opencontainers.image.description Firebase firestore emulator for CI
-
 ## Compatibility for glibc
 RUN apk --no-cache add gcompat
 
@@ -36,6 +34,21 @@ RUN firebase setup:emulators:firestore
 COPY firebase.json .
 
 COPY .firebaserc .
+
+LABEL "org.opencontainers.image.description"="Firebase firestore emulator for CI"
+
+ARG FIRESTORE_PORT=8080
+ENV FIRESTORE_PORT=${FIRESTORE_PORT}
+
+ARG AUTH_PORT=9099
+ENV AUTH_PORT=${AUTH_PORT}
+
+EXPOSE ${FIRESTORE_PORT} ${AUTH_PORT}
+
+COPY healthcheck.sh .
+
+HEALTHCHECK --interval=20s --timeout=15s \
+	CMD ./healthcheck.sh
 
 ENTRYPOINT ["firebase"]
 
