@@ -68,7 +68,23 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # Build and push Docker image with Buildx (don't push on PR)
+      # Build image with Buildx for testing (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and test Docker image
+        id: build-and-test
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # Run test that emulator starts correctly
+      - name: Test image
+        run: |
+          ./runtest.sh "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+
+      # Build image with Buildx and push if not on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
         id: build-and-push
@@ -78,6 +94,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
