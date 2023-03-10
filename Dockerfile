@@ -32,11 +32,7 @@ WORKDIR /home/${USER}
 RUN firebase setup:emulators:firestore
 RUN firebase setup:emulators:ui
 
-COPY firebase.json .
-
-COPY .firebaserc .
-
-COPY firestore.rules .
+COPY --chown=${USER}:${USER} src/* ./
 
 LABEL "org.opencontainers.image.description"="Firebase firestore emulator for CI"
 
@@ -63,8 +59,6 @@ EXPOSE ${UI_PORT}
 EXPOSE ${UI_WEBSOCKET_PORT}
 EXPOSE ${UI_LOGGING_PORT}
 EXPOSE ${HUB_PORT}
-
-COPY healthcheck.sh .
 
 HEALTHCHECK --interval=20s --timeout=15s \
 	CMD ./healthcheck.sh
