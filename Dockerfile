@@ -12,7 +12,7 @@ RUN apk --no-cache add openjdk11-jre-headless
 ## The following are just for debugging the container
 RUN apk --no-cache add bash curl
 
-ARG FIREBASE_TOOLS_VERSION="v11.20.0"
+ARG FIREBASE_TOOLS_VERSION="v12.4.5"
 
 RUN npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION}
 
