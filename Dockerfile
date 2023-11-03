@@ -1,4 +1,4 @@
-FROM node:16-alpine3.15
+FROM node:19-alpine3.15
 
 ## Compatibility for glibc
 RUN apk --no-cache add gcompat
