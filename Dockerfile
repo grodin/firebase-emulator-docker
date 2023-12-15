@@ -13,7 +13,7 @@ RUN apk --no-cache add openjdk11-jre-headless
 RUN apk --no-cache add bash curl
 
 # renovate: datasource=npm depName=firebase-tools
-ARG FIREBASE_TOOLS_VERSION=13.0.1
+ARG FIREBASE_TOOLS_VERSION=13.0.2
 
 RUN npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION}
 
