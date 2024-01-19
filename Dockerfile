@@ -1,16 +1,17 @@
-FROM node:19-alpine3.15
+ARG USER=firebase-emulator
 
-## Compatibility for glibc
-RUN apk --no-cache add gcompat
+FROM node:19-alpine3.15 as build
 
-## Compatibility for libstdc++
-RUN apk --no-cache add libstdc++
-
-## OpenJDK
-RUN apk --no-cache add openjdk11-jre-headless
-
-## The following are just for debugging the container
-RUN apk --no-cache add bash curl
+## Update apk index
+RUN apk update && \
+    ## Compatibility for glibc
+    apk --no-cache add gcompat \
+    ## Compatibility for libstdc++
+    libstdc++ \
+    ## OpenJDK
+    openjdk11-jre-headless \
+    ## The following are just for debugging the container
+    bash curl
 
 # renovate: datasource=npm depName=firebase-tools
 ARG FIREBASE_TOOLS_VERSION=13.0.3
@@ -20,7 +21,8 @@ RUN npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION}
 # Suppress npm update announcements
 RUN npm config set update-notifier false
 
-ENV USER=firebase-emulator
+ARG USER
+ENV USER=${USER}
 
 ## Create user
 RUN addgroup -g 1010 ${USER} \
@@ -30,8 +32,18 @@ USER ${USER}
 
 WORKDIR /home/${USER}
 
-RUN firebase setup:emulators:firestore
-RUN firebase setup:emulators:ui
+RUN firebase setup:emulators:firestore && \
+    firebase setup:emulators:ui
+
+FROM build
+
+ARG USER
+
+USER ${USER}
+
+WORKDIR /home/${USER}
+
+COPY --from=build /home/${USER} /home/${USER}
 
 COPY --chown=${USER}:${USER} src/* ./
 
