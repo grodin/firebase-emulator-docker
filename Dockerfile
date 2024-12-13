@@ -1,4 +1,9 @@
 # syntax=docker/dockerfile:1
+
+# Skip the below Docker check
+# The AUTH_PORT is not a secret
+# check=skip=SecretsUsedInArgOrEnv
+
 ARG USER=firebase-emulator
 
 FROM node:22-alpine3.21 AS build
