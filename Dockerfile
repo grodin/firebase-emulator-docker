@@ -1,6 +1,6 @@
 ARG USER=firebase-emulator
 
-FROM node:19-alpine3.15 as build
+FROM node:22-alpine3.21 AS build
 
 ## Update apk index
 RUN apk update && \
