@@ -9,7 +9,7 @@ RUN apk update && \
     ## Compatibility for libstdc++
     libstdc++ \
     ## OpenJDK
-    openjdk11-jre-headless \
+    openjdk21-jre-headless \
     ## The following are just for debugging the container
     bash curl
 
