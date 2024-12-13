@@ -1,6 +1,12 @@
+# syntax=docker/dockerfile:1
+
+# Skip the below Docker check
+# The AUTH_PORT is not a secret
+# check=skip=SecretsUsedInArgOrEnv
+
 ARG USER=firebase-emulator
 
-FROM node:19-alpine3.15 as build
+FROM node:22-alpine3.21 AS build
 
 ## Update apk index
 RUN apk update && \
@@ -9,7 +15,7 @@ RUN apk update && \
     ## Compatibility for libstdc++
     libstdc++ \
     ## OpenJDK
-    openjdk11-jre-headless \
+    openjdk21-jre-headless \
     ## The following are just for debugging the container
     bash curl
 
