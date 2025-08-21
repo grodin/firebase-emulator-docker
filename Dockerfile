@@ -20,7 +20,7 @@ RUN apk update && \
     bash curl
 
 # renovate: datasource=npm depName=firebase-tools
-ARG FIREBASE_TOOLS_VERSION=14.12.1
+ARG FIREBASE_TOOLS_VERSION=14.13.0
 
 RUN npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION}
 
