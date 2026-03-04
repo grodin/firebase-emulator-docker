@@ -1,2 +1,4 @@
 *.md
 .github/
+renovate.json5
+runtest.sh
